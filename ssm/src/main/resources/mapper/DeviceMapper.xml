@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.DeviceMapper">
+  
+ 
+		 <select id="findList" parameterType="deviceVo" resultType="deviceVo">
+			 SELECT d.*,t.type_name AS cname FROM tb_device d,device_type t
+		 	<where>
+		 		d.`device_type_id`=t.`device_type_id`
+		 	
+		 		<if test="deviceName!=null and deviceName!=''">
+		 		and	d.device_name like '%${deviceName}%'
+		 		</if>
+		 		<if test="status!=null and status!=''">
+		 			and d.status=#{status}
+		 		</if>
+		 	</where>
+		 </select>
+		 
+		 <select id="countDevice" resultType="deviceVo">
+			SELECT t.`type_name` AS cname ,COUNT(d.`device_type_id`) AS num FROM device_type t LEFT JOIN tb_device d ON t.`device_type_id`=d.`device_type_id` GROUP BY t.`device_type_id`
+		 </select>
+</mapper>
